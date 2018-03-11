@@ -13,20 +13,23 @@ data BFuckVal = Forward
               | In
   deriving (Show)
 
+parseBFProg :: Parser [BFuckVal]
+parseBFProg = many parseBF
+
 parseBF :: Parser BFuckVal
 parseBF = do skipMany $ noneOf "><+-.,[]"
              choice (parseLoop : singleBF)
 
 singleBF :: [Parser BFuckVal]
-singleBF = [ pBFVal '>' Forward
-           , pBFVal '<' Backwards
-           , pBFVal '+' Increase
-           , pBFVal '-' Decrease
-           , pBFVal '.' Out
-           , pBFVal ',' In
+singleBF = [ parseBFChar '>' Forward
+           , parseBFChar '<' Backwards
+           , parseBFChar '+' Increase
+           , parseBFChar '-' Decrease
+           , parseBFChar '.' Out
+           , parseBFChar ',' In
            ]
-  where pBFVal c val = do _ <- char c
-                          return val
+  where parseBFChar c val = do _ <- char c
+                               return val
 
 parseLoop :: Parser BFuckVal
 parseLoop = do _ <- char '['
