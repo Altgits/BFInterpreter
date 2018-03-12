@@ -4,6 +4,7 @@ module Local.Types( BFuckVal (..)
                   , tapeRight, tapeLeft
                   ) where
 
+-- Representation of every BFuck value
 data BFuckVal = Forward
               | Backwards
               | Increase
@@ -13,12 +14,14 @@ data BFuckVal = Forward
               | In
   deriving (Show)
 
+-- Actual tape represented as a zipper
 data Tape = Tape { getLeft  :: [Int]
                  , getFocus :: Int
                  , getRight :: [Int]}
 
 type Env = IO Tape
 
+-- Zipper helpers
 focusApply :: (Int -> Int) -> Tape -> Tape
 focusApply f (Tape l focus r) = Tape l (f focus) r
 

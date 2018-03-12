@@ -1,9 +1,7 @@
 module Local.Eval(eval) where
 
-import           Data.Char    (chr, ord)
-import           Data.List    (foldl')
-import qualified Data.Text    as T
-import qualified Data.Text.IO as TI
+import           Data.Char   (chr, ord)
+import           Data.List   (foldl')
 import           Local.Types
 
 eval :: Env -> BFuckVal -> Env
@@ -22,7 +20,8 @@ eval env Backwards  = do tape <- env
 -- Get the current cell then prints it out, returning tape intact
 eval env Out        = do tape <- env
                          let curCell = getFocus tape
-                         TI.putStr . T.pack $ [chr curCell]
+                         putChar $ chr curCell
+                           -- Prints the cell's ASCII representation
                          return tape
 -- Gets a character from stdin and turns it into its ASCII number, replacing the
 -- cell in focus with that character's number

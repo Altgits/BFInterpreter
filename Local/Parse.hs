@@ -9,6 +9,7 @@ parseBFProg :: Parser [BFuckVal]
 parseBFProg = many parseBF
 
 parseBF :: Parser BFuckVal
+-- Ignores everything that cannot be parsed, then tries each possible value
 parseBF = do skipMany $ noneOf "><+-.,[]"
              choice (parseLoop : singleBF)
 
@@ -24,6 +25,7 @@ singleBF = [ parseBFChar '>' Forward
                                return val
 
 parseLoop :: Parser BFuckVal
+-- NOTE: Warning, a single unmatched ] results in an error
 parseLoop = do _ <- char '['
                vals <- many parseBF
                _ <- char ']'
