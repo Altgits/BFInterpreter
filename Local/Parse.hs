@@ -1,17 +1,9 @@
 {-# LANGUAGE FlexibleContexts #-}
-module Local.Parse where
+module Local.Parse(parseBFProg) where
 
+import           Local.Types
 import           Text.Parsec
 import           Text.Parsec.Text (Parser)
-
-data BFuckVal = Forward
-              | Backwards
-              | Increase
-              | Decrease
-              | Loop [BFuckVal]
-              | Out
-              | In
-  deriving (Show)
 
 parseBFProg :: Parser [BFuckVal]
 parseBFProg = many parseBF
