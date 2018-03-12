@@ -36,6 +36,6 @@ eval env loop@(Loop vals) =
                       do let env' = foldl' eval env vals
                          oneRun <- env'
                          case getFocus oneRun of
-                          0 -> eval env' loop
-                          _ -> env'
+                          0 -> env'
+                          _ -> eval env' loop
 
