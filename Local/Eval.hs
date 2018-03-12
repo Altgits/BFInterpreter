@@ -28,9 +28,8 @@ eval env Out        = do tape <- env
 eval env In         = do (Tape left _ right) <- env
                          input <- ord <$> getChar  -- Gets the char and makes it into ASCII
                          return $ Tape left input right
--- Evaluates every value in the Loop, then checks the current cell to see if its zero,
--- if it is, it ends the loop, otherwise it evaluates the whole thing again with the new
--- tape
+-- Evaluates every value in the Loop, then checks the current cell to see if its zero, if
+-- it is, it ends the loop, otherwise it evaluates the whole thing again with the new tape
 eval env loop@(Loop vals) =
                       do let env' = foldl' eval env vals
                          oneRun <- env'

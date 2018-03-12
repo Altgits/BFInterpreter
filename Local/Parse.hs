@@ -1,19 +1,20 @@
 {-# LANGUAGE FlexibleContexts #-}
-module Local.Parse(parseBFProg) where
+module Local.Parse(readBF) where
 
 import           Local.Types
 import           Text.Parsec
 import           Text.Parsec.Text (Parser)
 
-parseBFProg :: Parser [BFuckVal]
-parseBFProg = many parseBF
+readBF input = case parse (many parseBF) "BFuck" input of
+                Right val -> val
 
 parseBF :: Parser BFuckVal
 -- Ignores everything that cannot be parsed, then tries each possible value
-parseBF = do skipMany $ noneOf "><+-.,[]"
-             choice (parseLoop : singleBF)
+parseBF = do skipMany $ noneOf "><+-.,[" -- ']' IS skipped, since it represents nothing without
+             choice (parseLoop : singleBF) -- '[', and aparently can demark a comment
 
 singleBF :: [Parser BFuckVal]
+-- Every possible standalone BF command
 singleBF = [ parseBFChar '>' Forward
            , parseBFChar '<' Backwards
            , parseBFChar '+' Increase
@@ -25,7 +26,6 @@ singleBF = [ parseBFChar '>' Forward
                                return val
 
 parseLoop :: Parser BFuckVal
--- NOTE: Warning, a single unmatched ] results in an error
 parseLoop = do _ <- char '['
                vals <- many parseBF
                _ <- char ']'
