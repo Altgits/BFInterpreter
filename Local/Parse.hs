@@ -10,8 +10,8 @@ readBF input = case parse (many parseBF) "BFuck" input of
 
 parseBF :: Parser BFuckVal
 -- Ignores everything that cannot be parsed, then tries each possible value
-parseBF = do skipMany $ noneOf "><+-.,[" -- ']' IS skipped, since it represents nothing without
-             choice (parseLoop : singleBF) -- '[', and aparently can demark a comment
+parseBF = do skipMany $ noneOf "><+-.,[]"
+             choice (parseLoop : singleBF)
 
 singleBF :: [Parser BFuckVal]
 -- Every possible standalone BF command

@@ -4,8 +4,8 @@ module Local.Types( BFuckVal (..)
                   , tapeRight, tapeLeft
                   ) where
 
-import           Data.Int  (Int8)
 import           Data.List (uncons)
+import           Data.Word (Word8)
 
 -- Representation of every BFuck value
 data BFuckVal = Forward
@@ -18,14 +18,14 @@ data BFuckVal = Forward
   deriving (Show)
 
 -- Actual tape represented as a zipper
-data Tape = Tape { getLeft  :: [Int8]
-                 , getFocus :: Int8
-                 , getRight :: [Int8]}
+data Tape = Tape { getLeft  :: [Word8]
+                 , getFocus :: Word8
+                 , getRight :: [Word8]}
 
 type Env = IO Tape
 
 -- Zipper helpers
-focusApply :: (Int8 -> Int8) -> Tape -> Tape
+focusApply :: (Word8 -> Word8) -> Tape -> Tape
 focusApply f (Tape l focus r) = Tape l (f focus) r
 
 tapeLeft :: Tape -> Tape
