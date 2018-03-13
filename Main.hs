@@ -1,3 +1,4 @@
+{-# LANGUAGE NumDecimals #-}
 module Main where
 
 import           Control.Monad      (foldM_)
@@ -20,5 +21,5 @@ main = do args <- getArgs
                     hClose handle
 
 initTape :: Tape
-initTape = let list = repeat 0
+initTape = let list = replicate 3e4 0
             in Tape [] 0 list
