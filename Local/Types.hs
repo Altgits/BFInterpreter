@@ -4,8 +4,9 @@ module Local.Types( BFuckVal (..)
                   , tapeRight, tapeLeft
                   ) where
 
-import           Data.List (uncons)
-import           Data.Word (Word8)
+import           Data.List   (uncons)
+import           Data.Word   (Word8)
+import           Text.Parsec (ParseError)
 
 -- Representation of every BFuck value
 data BFuckVal = Forward
@@ -15,6 +16,7 @@ data BFuckVal = Forward
               | Loop [BFuckVal]
               | Out
               | In
+              | Err ParseError
   deriving (Show)
 
 -- Actual tape represented as a zipper
@@ -28,6 +30,7 @@ type Env = IO Tape
 focusApply :: (Word8 -> Word8) -> Tape -> Tape
 focusApply f (Tape l focus r) = Tape l (f focus) r
 
+-- Reels left and right
 tapeLeft :: Tape -> Tape
 tapeLeft tape@(Tape _ _ [])            = wrapL tape
   where wrapL (Tape l foc r) = let list = reverse l ++ (foc:r)

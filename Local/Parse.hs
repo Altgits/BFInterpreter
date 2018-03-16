@@ -1,33 +1,38 @@
-{-# LANGUAGE FlexibleContexts #-}
+{-# LANGUAGE FlexibleContexts  #-}
+{-# LANGUAGE OverloadedStrings #-}
 module Local.Parse(readBF) where
 
+import           Data.Maybe       (catMaybes)
 import           Local.Types
 import           Text.Parsec
 import           Text.Parsec.Text (Parser)
 
 readBF input = case parse parseBF "BFuck" input of
-                Right val -> val
+  Right vals -> vals
+  Left err   -> [Err err]
 
 parseBF :: Parser [BFuckVal]
--- Ignores everything that cannot be parsed, then tries each possible value
-parseBF = do skipMany (noneOf "><+-.,[]")
-             many . choice $ parseLoop : singleBF
+parseBF = fmap catMaybes . many $   -- Gets multiple maybe vals, then gets them out of Maybe
+  (Just <$> choice bfVals) <|> comment -- These are the pssible parses, either something I can
+    where comment = do _ <- noneOf "]"  -- use or a comment
+                       return Nothing
 
-singleBF :: [Parser BFuckVal]
+bfVals :: [Parser BFuckVal]
 -- Every possible standalone BF command
-singleBF = [ parseBFChar '>' Forward
-           , parseBFChar '<' Backwards
-           , parseBFChar '+' Increase
-           , parseBFChar '-' Decrease
-           , parseBFChar '.' Out
-           , parseBFChar ',' In
-           ]
+bfVals = [ parseBFChar '>' Forward
+         , parseBFChar '<' Backwards
+         , parseBFChar '+' Increase
+         , parseBFChar '-' Decrease
+         , parseBFChar '.' Out
+         , parseBFChar ',' In
+         , parseLoop
+         ]
   where parseBFChar c val = do _ <- char c
                                return val
 
 parseLoop :: Parser BFuckVal
+-- A loop is defined as a bunch of values inside two brackets
 parseLoop = do _ <- char '['
                vals <- parseBF
                _ <- char ']'
                return $ Loop vals
-

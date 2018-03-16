@@ -1,4 +1,5 @@
 {-# LANGUAGE NumDecimals #-}
+{-# LANGUAGE Strict      #-}
 module Main where
 
 import           Control.Monad      (foldM_)
@@ -23,3 +24,8 @@ main = do args <- getArgs
 initTape :: Tape
 initTape = let list = replicate 3e4 0
             in Tape [] 0 list
+
+test :: String -> IO ()
+test fname = do handle <- openFile fname ReadMode
+                cont <- TI.hGetContents handle
+                print $ readBF cont
