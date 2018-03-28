@@ -6,6 +6,7 @@ import           Data.Char     (chr, ord)
 import           Local.Types
 
 eval :: Tape -> BFuckVal -> Env
+{-# INLINE eval #-}
 -- Increases the current cell
 eval tape Increase   = return $ focusApply (+ 1) tape
 -- Decreases the current cell

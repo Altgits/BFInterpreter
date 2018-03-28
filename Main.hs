@@ -17,15 +17,12 @@ main = do args <- getArgs
             _ -> do let filename = head args
                     handle <- openFile filename ReadMode
                     cont <- TI.hGetContents handle
-                    let program = readBF cont
-                    foldM_ eval initTape program
+                    let program = readBF cont     -- Parse the file into commands
+
+                    foldM_ eval initTape program  -- Execute each command into memory
                     hClose handle
 
 initTape :: Tape
+-- Initial memory of 3001 cells
 initTape = let list = replicate 3e4 0
             in Tape [] 0 list
-
-test :: String -> IO ()
-test fname = do handle <- openFile fname ReadMode
-                cont <- TI.hGetContents handle
-                print $ readBF cont

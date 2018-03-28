@@ -28,9 +28,11 @@ type Env = IO Tape
 
 -- Zipper helpers
 focusApply :: (Word8 -> Word8) -> Tape -> Tape
+{-# INLINE focusApply #-}
 focusApply f (Tape l focus r) = Tape l (f focus) r
 
 -- Reels left and right
+{-# INLINE tapeLeft #-}
 tapeLeft :: Tape -> Tape
 tapeLeft tape@(Tape _ _ [])            = wrapL tape
   where wrapL (Tape l foc r) = let list = reverse l ++ (foc:r)
@@ -39,6 +41,7 @@ tapeLeft tape@(Tape _ _ [])            = wrapL tape
 tapeLeft (Tape left oldF (newF:restR)) = Tape (oldF : left) newF restR
 
 tapeRight :: Tape -> Tape
+{-# INLINE tapeRight #-}
 tapeRight tape@(Tape [] _ _)             = wrapR tape
   where wrapR (Tape l foc r) = let list = reverse r ++ (foc:l)
                                    Just (nFoc, rest) = uncons list

@@ -1,12 +1,13 @@
-{-# LANGUAGE FlexibleContexts  #-}
-{-# LANGUAGE OverloadedStrings #-}
+{-# LANGUAGE FlexibleContexts #-}
 module Local.Parse(readBF) where
 
-import           Data.Maybe       (catMaybes)
+import           Data.Maybe         (catMaybes)
+import           Data.Text.Internal (Text)
 import           Local.Types
 import           Text.Parsec
-import           Text.Parsec.Text (Parser)
+import           Text.Parsec.Text   (Parser)
 
+readBF :: Text -> [BFuckVal]
 readBF input = case parse parseBF "BFuck" input of
   Right vals -> vals
   Left err   -> [Err err]

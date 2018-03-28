@@ -4,12 +4,6 @@
 -- The name of the package.
 name:                BFInterpreter
 
--- The package version.  See the Haskell package versioning policy (PVP) 
--- for standards guiding when and how versions should be incremented.
--- https://wiki.haskell.org/Package_versioning_policy
--- PVP summary:      +-+------- breaking API changes
---                   | | +----- non-breaking API additions
---                   | | | +--- code changes with no API change
 version:             0.2.3.0
 
 -- A short (one-line) description of the package.
@@ -31,11 +25,6 @@ author:              AltGits
 -- patches.
 maintainer:          richcrome@gmail.com
 
--- A copyright notice.
--- copyright:           
-
--- category:            
-
 build-type:          Simple
 
 -- Extra files to be distributed with the package, such as examples or a 
@@ -56,7 +45,7 @@ executable BFInterpreter
                        Local.Types
   
   -- LANGUAGE extensions used by modules in this package.
-  other-extensions:    OverloadedStrings,
+  other-extensions:    Strict,
                        FlexibleContexts
 
   ghc-options:         -Wcompat, -Wall
@@ -65,9 +54,6 @@ executable BFInterpreter
   build-depends:       base >=4.10 && <4.11, 
                        parsec,
                        text
-  
-  -- Directories containing source files.
-  -- hs-source-dirs:      
   
   -- Base language which the package is written in.
   default-language:    Haskell2010
